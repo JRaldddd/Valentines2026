@@ -166,23 +166,20 @@
     }
 
     .hearts {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -5px;
-      height: 250px;
+      position: fixed;
+      inset: 0;
       pointer-events: none;
-      z-index: 1;
+      z-index: 0;
       overflow: hidden;
     }
 
     .heart {
       position: absolute;
-      bottom: -12px;
+      bottom: -30px;
       color: #f53c7f;
       opacity: 0;
-      animation: floatUp 3.2s ease-in infinite;
-      font-size: 18px;
+      animation: floatUp 4s ease-in infinite;
+      font-size: 20px;
     }
 
     .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
@@ -195,7 +192,7 @@
     @keyframes floatUp {
       0% { transform: translateY(0) scale(0.7); opacity: 0; }
       15% { opacity: 0.95; }
-      100% { transform: translateY(-220px) scale(1.15); opacity: 0; }
+      100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
     }
 
     .card {
@@ -214,6 +211,7 @@
       padding: 18px 18px 16px;
       z-index: 6;
       transition: transform 800ms ease, opacity 350ms ease;
+      pointer-events: none;
     }
 
     .card h3 {
@@ -252,23 +250,12 @@
       font-weight: 700;
     }
 
-    .share {
-      margin-top: 18px;
-      text-align: center;
-      font-size: 0.92rem;
-      color: #7a3651;
-    }
-
-    .share a {
-      color: #b31d57;
-      font-weight: 700;
-    }
-
     .scene.open .seal { opacity: 0; }
     .scene.open .flap { transform: rotateX(180deg); }
     .scene.open .hearts .heart { opacity: 1; }
     .scene.open .letter { opacity: 1; transform: translate(-50%, -98px); }
-    .scene.show-card .card { opacity: 1; transform: translateX(-50%) perspective(1000px) rotateY(0deg); }
+    .scene.show-card .card { opacity: 1; transform: translateX(-50%) perspective(1000px) rotateY(0deg); pointer-events: auto; }
+    .scene.show-card .letter { opacity: 0; transform: translate(-50%, -30px); }
     .scene.show-signature .signature { opacity: 1; }
 
     .scene.closed .card,
@@ -284,12 +271,12 @@
   <main class="scene" id="scene">
     <div class="hint" id="hint">Tap envelope</div>
 
-    <div class="stage">
-      <div class="hearts" aria-hidden="true">
-        <span class="heart">❤</span><span class="heart">❤</span><span class="heart">❤</span>
-        <span class="heart">❤</span><span class="heart">❤</span><span class="heart">❤</span>
-      </div>
+    <div class="hearts" aria-hidden="true">
+      <span class="heart">❤</span><span class="heart">❤</span><span class="heart">❤</span>
+      <span class="heart">❤</span><span class="heart">❤</span><span class="heart">❤</span>
+    </div>
 
+    <div class="stage">
       <article class="card" id="card" aria-label="Valentine card">
         <h3>Happy Valentine's Day 💖</h3>
         <p class="typed" id="typedMessage"></p>
@@ -302,9 +289,15 @@
       <section class="letter" id="letter" aria-label="Letter">
         <h2>To My Love,</h2>
         <p>
-          Thank you for the amazing memories we made this year. Through every up and every down,
-          my love for you has only grown deeper.
+          Happy Valentine's Day. Thank you for the beautiful memories we've made this year, from the loud laughs
+          to the quiet, ordinary moments, like cooking together and appliance shopping as if we were an old couple
+          whenever we were bored.
         </p>
+        <p>
+          Through every high and every challenge, my feelings for you have only grown stronger. You are my favourite
+          person, and loving you keeps getting easier and deeper every day.
+        </p>
+        <p>Forever grateful for you. ❤️</p>
       </section>
 
       <div class="envelope-wrap" id="envelope" role="button" tabindex="0" aria-label="Open envelope">
@@ -314,10 +307,6 @@
       </div>
     </div>
 
-    <p class="share">
-      Shareable link after enabling GitHub Pages:
-      <a id="shareLink" href="#">Set your GitHub Pages URL</a>
-    </p>
   </main>
 
   <script>
@@ -327,9 +316,8 @@
     const signature = document.getElementById("signature");
     const hint = document.getElementById("hint");
     const closeBtn = document.getElementById("closeBtn");
-    const shareLink = document.getElementById("shareLink");
 
-    const message = "Thank you for the amazing memories we had this year. Through all the highs and lows, I only love you more.";
+    const message = "Happy Valentine's Day\n\n Thank you for the beautiful memories we've made this year, from the loud laughs to the quiet, ordinary moments like cooking together to appliance shopping as if we were an old couple whenever we are boredthat turned out to be the most \n        Through every high and every challenge, my feelings for you have only grown stronger. You are my favourite person, and loving you keeps getting easier and deeper every day. Forever grateful for you. ❤️";
 
     let isAnimating = false;
     let isOpen = false;
@@ -385,14 +373,6 @@
       resetToClosedState(); // hide card + letter so only envelope remains
     });
 
-    // Set share link for GitHub Pages (or keep placeholder if opened locally)
-    const isHttp = window.location.protocol.startsWith("http");
-    if (isHttp) {
-      shareLink.href = window.location.href;
-      shareLink.textContent = window.location.href;
-    } else {
-      shareLink.textContent = "https://<your-username>.github.io/<repo-name>/";
-    }
 
     resetToClosedState();
   </script>
