@@ -6,14 +6,12 @@
   <title>Valentine Envelope</title>
   <style>
     :root {
-      --pink-1: #f8e6ee;
-      --pink-2: #edd2de;
-      --ink: #4e1f33;
-      --accent: #d1457f;
-      --wax: #c93268;
-      --paper: #fff9ed;
-      --paper-shadow: #e8d8c4;
-      --vintage-line: rgba(109, 67, 44, 0.12);
+      --pink-1: #ffe8f1;
+      --pink-2: #ffd3e3;
+      --pink-3: #ff95b8;
+      --pink-4: #e43b78;
+      --ink: #5a1c35;
+      --paper: #fffefc;
     }
 
     * { box-sizing: border-box; }
@@ -24,31 +22,150 @@
       display: grid;
       place-items: center;
       padding: 24px;
-      font-family: Georgia, "Times New Roman", serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       color: var(--ink);
       background: radial-gradient(circle at top, var(--pink-1), var(--pink-2));
     }
 
     .scene {
       position: relative;
-      width: min(760px, 96vw);
-      min-height: 620px;
+      width: min(680px, 96vw);
+      min-height: 560px;
       display: grid;
       place-items: center;
     }
 
     .hint {
       position: absolute;
-      top: 8px;
+      top: 10px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 248, 252, 0.86);
-      border: 1px solid #e7b1c8;
+      font-weight: 700;
+      color: var(--pink-4);
+      background: #fff8fb;
+      border: 1px solid #ffc2d8;
       border-radius: 999px;
-      padding: 8px 15px;
-      font: 700 0.9rem/1.2 "Segoe UI", Tahoma, sans-serif;
-      color: var(--accent);
-      z-index: 10;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      z-index: 8;
+    }
+
+    .stage {
+      position: relative;
+      width: 360px;
+      height: 290px;
+      display: grid;
+      place-items: end center;
+    }
+
+    .envelope-wrap {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .envelope {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 190px;
+      background: #ffc0d8;
+      border: 2px solid #f398bd;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 16px 35px rgba(228, 59, 120, 0.2);
+    }
+
+    .envelope::before,
+    .envelope::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
+
+    .envelope::after {
+      right: 0;
+      transform: scaleX(-1);
+    }
+
+    .flap {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 190px;
+      transform-origin: top;
+      transition: transform 700ms ease;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .flap::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 130px;
+      background: #ff9fc3;
+      clip-path: polygon(50% 100%, 0 0, 100% 0);
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      border: 2px solid #f398bd;
+      border-bottom: none;
+    }
+
+    .seal {
+      position: absolute;
+      left: 50%;
+      top: 74px;
+      transform: translate(-50%, -50%);
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffeff5, #ff4d8f);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 1.15rem;
+      border: 2px solid #fff5f9;
+      box-shadow: 0 7px 16px rgba(228, 59, 120, 0.3);
+      z-index: 5;
+      transition: opacity 250ms ease;
+    }
+
+    .letter {
+      position: absolute;
+      left: 50%;
+      bottom: 32px;
+      transform: translate(-50%, 80px);
+      opacity: 0;
+      width: 260px;
+      background: var(--paper);
+      border-radius: 10px;
+      border: 1px solid #ffd2e3;
+      box-shadow: 0 12px 24px rgba(228, 59, 120, 0.15);
+      padding: 16px;
+      z-index: 2;
+      transition: transform 700ms ease, opacity 450ms ease;
+    }
+
+    .letter h2 {
+      margin: 0 0 8px;
+      color: var(--pink-4);
+      font-size: 1.15rem;
+    }
+
+    .letter p {
+      margin: 0;
+      line-height: 1.55;
+      font-size: 0.95rem;
     }
 
     .hearts {
@@ -61,283 +178,95 @@
 
     .heart {
       position: absolute;
-      bottom: -36px;
-      color: #f03a77;
+      bottom: -30px;
+      color: #f53c7f;
       opacity: 0;
-      animation: floatUp 4.2s ease-in infinite;
-      font-size: 22px;
+      animation: floatUp 4s ease-in infinite;
+      font-size: 20px;
     }
 
-    .heart:nth-child(1) { left: 12%; animation-delay: 0s; }
-    .heart:nth-child(2) { left: 24%; animation-delay: .7s; }
-    .heart:nth-child(3) { left: 40%; animation-delay: 1.4s; }
-    .heart:nth-child(4) { left: 55%; animation-delay: .4s; }
-    .heart:nth-child(5) { left: 70%; animation-delay: 1.8s; }
-    .heart:nth-child(6) { left: 86%; animation-delay: 2.2s; }
+    .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .heart:nth-child(2) { left: 25%; animation-delay: 0.6s; }
+    .heart:nth-child(3) { left: 38%; animation-delay: 1.1s; }
+    .heart:nth-child(4) { left: 56%; animation-delay: 0.35s; }
+    .heart:nth-child(5) { left: 74%; animation-delay: 1.6s; }
+    .heart:nth-child(6) { left: 88%; animation-delay: 1.9s; }
 
     @keyframes floatUp {
-      0% { transform: translateY(0) scale(.72); opacity: 0; }
-      10% { opacity: .9; }
-      100% { transform: translateY(-110vh) scale(1.14); opacity: 0; }
-    }
-
-    .stage {
-      position: relative;
-      width: 390px;
-      height: 360px;
-      display: grid;
-      place-items: end center;
-      z-index: 2;
-    }
-
-    .envelope-wrap {
-      position: relative;
-      width: 330px;
-      height: 230px;
-      z-index: 3;
-      cursor: pointer;
-    }
-
-    .envelope {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 195px;
-      background: #f8b9cf;
-      border: 2px solid #e690b4;
-      border-radius: 8px;
-      box-shadow: 0 16px 35px rgba(201, 59, 112, 0.22);
-      overflow: hidden;
-    }
-
-    .envelope::before,
-    .envelope::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 50%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.24);
-      clip-path: polygon(0 0, 100% 50%, 0 100%);
-    }
-
-    .envelope::after { right: 0; transform: scaleX(-1); }
-
-    .flap {
-      position: absolute;
-      inset: 0;
-      transform-origin: top;
-      transition: transform 760ms cubic-bezier(.2,.76,.27,1.03);
-      z-index: 4;
-      pointer-events: none;
-    }
-
-    .flap::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100px;
-      background: #f29abf;
-      clip-path: polygon(50% 100%, 0 0, 100% 0);
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-      border: 2px solid #e690b4;
-      border-bottom: none;
-    }
-
-    .seal {
-      position: absolute;
-      left: 50%;
-      top: 75px;
-      transform: translate(-50%, -50%);
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #ff9ec2, var(--wax));
-      border: 2px solid #ffd2e2;
-      box-shadow: 0 8px 16px rgba(141, 21, 66, 0.32);
-      color: #ffe8f1;
-      display: grid;
-      place-items: center;
-      font-size: 1.15rem;
-      z-index: 5;
-    }
-
-    .seal::before,
-    .seal::after {
-      content: "";
-      position: absolute;
-      width: 2px;
-      height: 34px;
-      background: rgba(255, 235, 242, 0.92);
-      opacity: 0;
-      transform-origin: center;
-      border-radius: 3px;
-    }
-
-    .seal::before { transform: rotate(26deg) scaleY(0.2); }
-    .seal::after { transform: rotate(-22deg) scaleY(0.2); }
-
-    @keyframes crackSeal {
-      0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-      25% { transform: translate(-50%, -50%) scale(1.07) rotate(-2deg); }
-      55% { transform: translate(-50%, -50%) scale(0.95) rotate(4deg); opacity: 1; }
-      100% { transform: translate(-50%, -50%) translateY(12px) scale(0.3) rotate(18deg); opacity: 0; }
-    }
-
-    .letter {
-      position: absolute;
-      left: 50%;
-      bottom: 34px;
-      transform: translate(-50%, 95px) rotateX(82deg) scale(0.88);
-      transform-origin: bottom center;
-      opacity: 0;
-      width: 285px;
-      padding: 20px 18px;
-      border-radius: 8px;
-      border: 1px solid #dfc8b4;
-      color: #5a3b2f;
-      background:
-        repeating-linear-gradient(180deg, transparent 0 26px, var(--vintage-line) 26px 27px),
-        linear-gradient(145deg, #fffdf7, var(--paper));
-      box-shadow: 0 12px 24px rgba(111, 77, 44, 0.2), inset 0 0 1px #fff;
-      z-index: 2;
-      transition: transform 850ms cubic-bezier(.2,.8,.2,1), opacity 420ms ease;
-    }
-
-    .letter h2 {
-      margin: 0 0 8px;
-      color: #8b3a62;
-      font-size: 2rem;
-      font-family: "Brush Script MT", "Lucida Handwriting", cursive;
-      font-weight: 500;
-    }
-
-    .letter p {
-      margin: 0 0 10px;
-      font-size: 1.03rem;
-      line-height: 1.55;
-      font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+      0% { transform: translateY(0) scale(0.7); opacity: 0; }
+      15% { opacity: 0.95; }
+      100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
     }
 
     .card {
       position: absolute;
-      top: 6px;
+      top: 16px;
       left: 50%;
-      width: 340px;
-      min-height: 270px;
-      transform: translateX(-50%) perspective(1200px) rotateY(-92deg);
+      width: 330px;
+      min-height: 250px;
+      transform: translateX(-50%) perspective(1000px) rotateY(-90deg);
       transform-origin: left center;
       opacity: 0;
-      pointer-events: none;
+      background: linear-gradient(145deg, #fff, #fff6fa);
+      border: 1px solid #ffc3d9;
       border-radius: 14px;
-      border: 1px solid #dbbecf;
-      background: linear-gradient(160deg, #fffbf7, #fff3f9);
-      box-shadow: 0 18px 35px rgba(116, 69, 92, 0.23);
-      padding: 18px;
+      box-shadow: 0 14px 35px rgba(228, 59, 120, 0.2);
+      padding: 18px 18px 16px;
       z-index: 6;
-      transition: transform 850ms ease, opacity 320ms ease;
+      transition: transform 800ms ease, opacity 350ms ease;
+      pointer-events: none;
     }
 
     .card h3 {
       margin: 0;
-      font-size: 1.8rem;
-      color: #c8447b;
-      font-family: "Brush Script MT", "Lucida Handwriting", cursive;
-      font-weight: 500;
+      color: var(--pink-4);
+      font-size: 1.35rem;
     }
 
     .typed {
-      min-height: 104px;
-      margin-top: 8px;
+      min-height: 90px;
+      margin-top: 12px;
       line-height: 1.65;
-      font-size: 1.04rem;
-      font-family: "Brush Script MT", "Segoe Script", cursive;
-      letter-spacing: 0.2px;
-    }
-
-    .typed.writing {
-      text-shadow: 0 0 1px rgba(51, 26, 39, 0.35);
+      font-size: 1rem;
     }
 
     .signature {
       margin-top: 10px;
-      font-size: 2rem;
-      color: transparent;
-      background: linear-gradient(90deg, #ad2f64, #d34f84 45%, #ad2f64 85%);
-      background-size: 220% 100%;
-      background-position: 130% 0;
-      -webkit-background-clip: text;
-      background-clip: text;
+      font-weight: 700;
+      color: var(--pink-4);
       opacity: 0;
       transition: opacity 280ms ease;
-      font-family: "Brush Script MT", "Lucida Handwriting", cursive;
-      font-weight: 500;
     }
 
-    .card-actions { margin-top: 6px; text-align: right; }
+    .card-actions {
+      margin-top: 16px;
+      text-align: right;
+    }
 
     button {
       border: 0;
-      border-radius: 10px;
-      padding: 8px 15px;
-      background: var(--accent);
+      background: var(--pink-4);
       color: white;
-      font: 700 1.05rem/1 "Segoe UI", sans-serif;
+      padding: 8px 14px;
+      border-radius: 8px;
       cursor: pointer;
+      font-weight: 700;
     }
 
-    @keyframes inkFlow {
-      from { background-position: 130% 0; }
-      to { background-position: 0 0; }
-    }
-
-    .scene.crack .seal {
-      animation: crackSeal 540ms ease forwards;
-    }
-
-    .scene.crack .seal::before,
-    .scene.crack .seal::after {
-      opacity: 1;
-      transition: opacity 120ms ease;
-    }
-
+    .scene.open .seal { opacity: 0; }
     .scene.open .flap { transform: rotateX(180deg); }
     .scene.open .hearts .heart { opacity: 1; }
-    .scene.open .letter {
-      opacity: 1;
-      transform: translate(-50%, -95px) rotateX(0deg) scale(1);
-    }
-
-    .scene.show-card .card {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(-50%) perspective(1200px) rotateY(0deg);
-    }
-
-    .scene.show-card .letter {
-      opacity: 0;
-      transform: translate(-50%, -36px) rotateX(-20deg) scale(0.96);
-    }
-
-    .scene.show-signature .signature {
-      opacity: 1;
-      animation: inkFlow 1.2s ease forwards;
-    }
+    .scene.open .letter { opacity: 1; transform: translate(-50%, -98px); }
+    .scene.show-card .card { opacity: 1; transform: translateX(-50%) perspective(1000px) rotateY(0deg); pointer-events: auto; }
+    .scene.show-card .letter { opacity: 0; transform: translate(-50%, -30px); }
+    .scene.show-signature .signature { opacity: 1; }
 
     .scene.closed .card,
-    .scene.closed .letter {
-      opacity: 0 !important;
-      transform: translate(-50%, 95px) rotateX(82deg) scale(0.88) !important;
-    }
+    .scene.closed .letter { opacity: 0 !important; transform: translate(-50%, 80px) !important; }
 
-    .scene.closed .seal { opacity: 1; transform: translate(-50%, -50%); animation: none; }
-
-    @media (max-width: 520px) {
-      .stage { transform: scale(.91); }
-      .card { width: 308px; }
+    @media (max-width: 500px) {
+      .stage { transform: scale(0.92); }
+      .card { width: 300px; }
     }
   </style>
 </head>
@@ -363,7 +292,7 @@
       <section class="letter" id="letter" aria-label="Letter">
         <h2>To My Love,</h2>
         <p>
-          Happy Valentine's Day. Thank you for the beautiful memories we've made this year — from the loud laughs
+          Happy Valentine's Day. Thank you for the beautiful memories we've made this year, from the loud laughs
           to the quiet, ordinary moments, like cooking together and appliance shopping as if we were an old couple
           whenever we were bored.
         </p>
@@ -380,16 +309,18 @@
         <div class="envelope"></div>
       </div>
     </div>
+
   </main>
 
   <script>
     const scene = document.getElementById("scene");
     const envelope = document.getElementById("envelope");
     const typedMessage = document.getElementById("typedMessage");
+    const signature = document.getElementById("signature");
     const hint = document.getElementById("hint");
     const closeBtn = document.getElementById("closeBtn");
 
-    const message = "Thank you for every memory this year. Through every high and challenge, I only love you more. Forever grateful for you.";
+    const message = "Happy Valentine's Day\n\n Thank you for the beautiful memories we've made this year, from the loud laughs to the quiet, ordinary moments like cooking together to appliance shopping as if we were an old couple whenever we are boredthat turned out to be the most \n        Through every high and every challenge, my feelings for you have only grown stronger. You are my favourite person, and loving you keeps getting easier and deeper every day. Forever grateful for you. ❤️";
 
     let isAnimating = false;
     let isOpen = false;
@@ -397,21 +328,20 @@
     const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     async function typeMessage() {
-      typedMessage.classList.add("writing");
       typedMessage.textContent = "";
       for (let i = 0; i < message.length; i++) {
         typedMessage.textContent += message[i];
-        await wait(30 + Math.random() * 20);
+        await wait(24);
       }
-      typedMessage.classList.remove("writing");
       scene.classList.add("show-signature");
     }
 
     function resetToClosedState() {
       isOpen = false;
-      scene.classList.remove("crack", "open", "show-card", "show-signature");
+      scene.classList.remove("open", "show-card", "show-signature");
       scene.classList.add("closed");
       typedMessage.textContent = "";
+      signature.style.opacity = "";
       hint.textContent = "Tap envelope";
     }
 
@@ -419,19 +349,14 @@
       if (isAnimating || isOpen) return;
       isAnimating = true;
       scene.classList.remove("closed");
-      hint.textContent = "Unsealing your letter...";
+      scene.classList.add("open"); // seal disappears, flap opens, hearts float, letter slides out
+      hint.textContent = "A little surprise for you...";
 
-      scene.classList.add("crack"); // wax seal cracking animation
-      await wait(550);
-
-      scene.classList.add("open"); // flap open + hearts + letter unfolding
-      hint.textContent = "A letter for you...";
-
-      await wait(980);
+      await wait(900);
       scene.classList.add("show-card"); // card opens like a book
 
-      await wait(860);
-      await typeMessage(); // handwritten-like ink typing
+      await wait(900);
+      await typeMessage(); // message types out, then signature appears
 
       isOpen = true;
       isAnimating = false;
@@ -448,8 +373,9 @@
 
     closeBtn.addEventListener("click", () => {
       if (isAnimating) return;
-      resetToClosedState();
+      resetToClosedState(); // hide card + letter so only envelope remains
     });
+
 
     resetToClosedState();
   </script>
